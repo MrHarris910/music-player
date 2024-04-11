@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music Player Design - Easy Tutorials</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/feb66b42b0.js" crossorigin="anonymous"></script>
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="music-player">
+        <nav>
+          <div class="circle">
+            <i class="fa-solid fa-angle-left"></i>
+          </div>
+          <div class="circle">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+        </nav>
+        <img src="media/harley.jpg" class="song-img">
+        <h1>harley Quinn</h1>
+        <p>Jaxks' Void</p>
+
+        <audio id="song">
+          <source src="media/harley-quinn.mp3" type="audio/mpeg">
+        </audio>
+        <input type="range" value="0" id="progress">
+
+        <!-- this div is the media control display -->
+
+        <div class="controls">
+          <div><i class="fa-solid fa-backward"></i></div>
+          <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+          <div><i class="fa-solid fa-forward"></i></div>
+        </div>
+
+      </div>
+    </div>
+    
+    <script>
+
+      // progross = progress
+      // song = song
+      // ctrlIcon = ctrlIcon
+
+      let progress = document.getElementById("progress")
+      let song = document.getElementById("song")
+      let ctrlIcon = document.getElementById("ctrlIcon")
+
+      // song.onloadedmetadata is calling for the mp3 attatched to <audio id="song">
+
+      song.onloadedmetadata = function(){
+
+        // progress.max = the duration of the song
+        progress.max = song.duration;
+
+        // progress.value = the current time of song
+        progress.value = song.currentTime;
+      }
+
+      // this function will check weather the song is playing or paused
+      function playPause() {
+
+        // if the song is paused, it will pause the song and remove the play icon
+        if(ctrlIcon.classList.contains("fa-pause")){
+          song.pause();
+          ctrlIcon.classList.remove("fa-pause");
+          ctrlIcon.classList.add("fa-play");
+        }
+
+        // if the song is playing, it will play the song and remove the pause icon
+        else{
+          song.play();
+          ctrlIcon.classList.add("fa-pause");
+          ctrlIcon.classList.remove("fa-play");
+        }
+
+      }
+
+      // the next code snippent makes it to where as the song progresses, the slider updates
+      // every 500ms
+      // so if the song is playing, set time interval of the current song time = current song progress every 500ms
+
+      if(song.play()){
+        setInterval(()=>{
+          progress.value = song.currentTime;
+        },500);
+      }
+
+      // this snippet makes it to where if you click anywhere on the slider, the songs progress value will match the time relative to where you click on the slider
+
+      progress.onchange = function(){
+        song.play();
+        song.currentTime = progress.value;
+        ctrlIcon.classList.add("fa-pause");
+        ctrlIcon.classList.remove("fa-play");
+      }
+
+
+    </script>
+  </body>
+</html>
